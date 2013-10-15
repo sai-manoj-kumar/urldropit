@@ -11,8 +11,8 @@ class URLDropit(handler.Handler):
             self.render('sb_form.jinja2', active='home')
 
     def post(self):
-        url = self.request.get('url')
-        filename = self.request.get('filename')
+        url = self.request.get('url').strip()
+        filename = self.request.get('filename').strip()
         if url is not None and url != '':
             logging.debug('URL is %s' % url)
             if url[:7] != 'http://' and url[:8] != 'https://':
