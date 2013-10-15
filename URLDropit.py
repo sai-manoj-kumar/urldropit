@@ -15,7 +15,7 @@ class URLDropit(handler.Handler):
         filename = self.request.get('filename')
         if url is not None and url != '':
             logging.debug('URL is %s' % url)
-            if url.find('http://') != 0 and url.find('https://') != 0:
+            if url[:7] != 'http://' and url[:8] != 'https://':
                 url = 'http://' + url
                 logging.debug('Modified URL is %s' % url)
             self.render('sb_download.jinja2', url=url, filename=filename)
