@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="URL Dropit Drop your download link here to save it in your dropbox">
+    <meta name="author" content="Sai Manoj Kumar Yadlapati">
+
+    <title>URL Dropit</title>
+
+    <link href="/assets/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+    {% block head %}
+    {% endblock head %}
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for Sticky Footer -->
+    <link href="/assets/css/sticky-footer-navbar.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 50px; /* 50px to make the container go all the way to the bottom of the topbar */
+        }
+
+        #photo {
+            float: left;
+            padding-right: 30px;
+            padding-bottom: 30px;
+        }
+
+        h1 {
+            padding-bottom: 25px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="wrap">
+    <div class="navbar-wrapper">
+        <div class="container">
+
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">URL Dropit</a>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li {% if active == 'home' %} class="active" {% endif %}><a href="/">Home</a></li>
+                            {#                            <li {% if active == 'about' %} class="active" {% endif %}><a href="/#about">About</a></li>#}
+                            <li {% if active == 'credits' %} class="active" {% endif %}>
+                                <a href="/credits">Credits</a></li>
+                        </ul>
+                    </div>
+                    <!--/.navbar-collapse -->
+                </div>
+            </div>
+        </div>
+        <!-- /container -->
+    </div>
+
+    {% block body %}
+    {% endblock body %}
+
+</div>
+<div id="footer">
+    <div class="container">
+        <p class="text-muted">&copy; 2013 <a href="http://www.ysaimanojkumar.com">Sai Manoj Kumar Yadlapati</a>
+                <span class="credit">| Made pretty with <a href="http://getbootstrap.com/">Bootstrap</a>;
+                    Sticky footer courtesy <a href="http://martinbean.co.uk">Martin Bean</a> and
+                    <a href="http://ryanfait.com/sticky-footer/">Ryan Fait</a>; Icons courtesy
+                    <a href="http://glyphicons.com/">Glyphicons</a> </span>
+        </p>
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src='/assets/js/bootstrap.min.js'></script>
+<!-- Placed at the end of the document so the pages load faster -->
+</body>
+</html>
+
+
+

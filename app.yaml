@@ -1,0 +1,23 @@
+application: urldropit
+version: initial
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /assets
+  static_dir: assets
+- url: /favicon\.ico
+  static_files: assets/imgs/favicon.ico
+  upload: assets/imgs/favicon\.ico
+- url: /.*
+  script: urlmapper.app
+
+
+libraries:
+- name: webapp2
+  version: "2.5.1"
+- name: jinja2
+  version: latest
+- name: markupsafe
+  version: latest
