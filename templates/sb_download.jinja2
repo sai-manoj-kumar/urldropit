@@ -42,7 +42,7 @@
         send_feedback = function (success) {
             var feedback_url = "/yesnofeedback";
             var url = "{{ url }}";
-            var input = {url: url, success: success};
+            var input = {url: url, {% if filename %}filename:"{{ filename }}",{% endif %} success: success};
             $.ajax({
                 type: 'POST',
                 url: feedback_url,
