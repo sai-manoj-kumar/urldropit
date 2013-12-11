@@ -1,0 +1,22 @@
+{% extends "base.jinja2" %}
+
+{% block body %}
+    <div class="container text-center">
+
+        <div class="jumbotron">
+            If you like the app, you can flattr this thing
+            <script id='fbp9sxa'>(function (i) {
+                var f, s = document.getElementById(i);
+                f = document.createElement('iframe');
+                f.src = '//api.flattr.com/button/view/?uid=ysaimanojkumar&' +
+                        'button=compact&url=http%3A%2F%2Furldropit.appspot.com%2F';
+                f.title = 'Flattr';
+                f.height = 20;
+                f.width = 110;
+                f.style.borderWidth = 0;
+                s.parentNode.insertBefore(f, s);
+            })('fbp9sxa');</script>
+        </div>
+
+    </div>
+{% endblock %}
