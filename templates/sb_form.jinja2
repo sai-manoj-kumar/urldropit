@@ -2,24 +2,68 @@
 {% block head %}
     <!-- Custom styles for form -->
     <link href="/assets/css/signin.css" rel="stylesheet">
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropins.js" id="dropboxjs"
+            data-app-key="ukgdvk7xk7ck2x8"></script>
+
+    <script type="text/javascript">
+        save2db = function () {
+            var fileurl = $("#url").val();
+            console.log(fileurl);
+            options = {
+                files: [
+                    {'url': fileurl}
+                ],
+                success: function () {
+                    console.log('successfully downloaded');
+                },
+                progress: function (progress) {
+                    var pr = Math.floor(progress * 100);
+                    var d = "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"" + pr
+                            + "\" aria-valuemin=\"0\" aria-valuemax=\"100\" " +
+                            "style=\"width: " + pr + "%; \"><span class=\"sr-only\">" + pr + "% Complete </span></div>";
+                    console.log(d);
+                    $("#progress").html(d);
+                },
+                cancel: function () {
+                },
+                error: function (errmsg) {
+                    console.log('error occured');
+                }
+            }
+
+            Dropbox.save(options);
+            return false;
+        }
+    </script>
+
 {% endblock head %}
 
 {% block body %}
 
 
     <div class="container text-center">
-        <h2><a href="/"> URL Dropit </a> -- Drop your download link here to save it in your dropbox</h2>
+
+        <h3>
+            Save any file over internet to Dropbox with out even downloading it to your computer
+        </h3>
+
         {% if error %}
             <div class="alert alert-danger">
                 {{ error }}
             </div>
         {% endif %}
 
-        <form action="/download" method="get" class="form-signin">
-            <h2 class="form-signin-heading">Enter the Download URL</h2>
-            <input type="text" class="form-control" placeholder="Enter the Url" name="url" autofocus>
-            <input type="text" class="form-control" placeholder="Name of file (Optional)" name="filename">
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Save to Dropbox</button>
+        <form action="javascript:save2db();" method="get" class="form-signin">
+            <label class="sr-only">
+                Enter the URL
+            </label>
+            <input type="text" id="url" class="form-control" placeholder="Enter the URL" name="url" autofocus>
+            <button class="btn btn-primary" type="submit">Save to Dropbox</button>
         </form>
+
+        <div class="progress" id="progress">
+        </div>
+
     </div>
+
 {% endblock %}
