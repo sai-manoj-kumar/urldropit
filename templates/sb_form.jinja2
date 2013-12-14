@@ -6,34 +6,95 @@
             data-app-key="ukgdvk7xk7ck2x8"></script>
 
     <script type="text/javascript">
+        updateprogress = function (progress) {
+            var percentprogress = Math.floor(progress * 100);
+
+            {#                    var d = "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"" + percentprogress#}
+            {#                            + "\" aria-valuemin=\"0\" aria-valuemax=\"100\" " +#}
+            {#                            "style=\"width: " + percentprogress + "%; \"><span class=\"sr-only\">" + percentprogress + "% Complete </span></div>";#}
+
+            $("#progressbar").attr("aria-valuenow", percentprogress);
+            $("#progressbar").attr("style", "width:" + percentprogress + "%");
+            $("#progressbar span").html(percentprogress + "% Complete");
+
+            $("#progresspercent").html(percentprogress + "% Complete");
+
+            console.log(progress);
+            {#                    $("#progress").html(d);#}
+        };
+
+        initprogress = function () {
+            updateprogress(0);
+            $("#progress").slideDown(2000);
+            $("#progresspercent").show();
+            $("#done").hide();
+            $("#error").hide();
+            $("#report").hide();
+        };
+
         save2db = function () {
-            var fileurl = $("#url").val();
+            var fileurl = $.trim($("#url").val());
             console.log(fileurl);
+            if (fileurl === "" || typeof fileurl === "undefined") {
+                return false;
+            }
+            if (fileurl.indexOf('http://') != 0 && fileurl.indexOf('https://') != 0 && fileurl.indexOf('ftp://') != 0) {
+                if (fileurl.indexOf('//') == 0) {
+                    fileurl = 'http:' + fileurl;
+                }
+                if (fileurl.indexOf('://') == -1) {
+                    // Adds http:// before the given url if and only if the url does not contain any protocol
+                    // information
+                    fileurl = 'http://' + fileurl;
+                }
+            }
             options = {
                 files: [
                     {'url': fileurl}
                 ],
                 success: function () {
-                    console.log('successfully downloaded');
+                    console.log('File is Successfully Downloaded to Your Dropbox');
+                    $("#done").slideDown(3000);
+                    setTimeout(function () {
+                        $("#progress").slideUp(2000);
+                        $("#progresspercent").slideUp(2000);
+                    }, 5000);
+
                 },
-                progress: function (progress) {
-                    var pr = Math.floor(progress * 100);
-                    var d = "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"" + pr
-                            + "\" aria-valuemin=\"0\" aria-valuemax=\"100\" " +
-                            "style=\"width: " + pr + "%; \"><span class=\"sr-only\">" + pr + "% Complete </span></div>";
-                    console.log(d);
-                    $("#progress").html(d);
-                },
+                progress: updateprogress,
                 cancel: function () {
+                    $("#progress").hide();
+                    $("#progresspercent").hide();
                 },
                 error: function (errmsg) {
-                    console.log('error occured');
+                    $("#progress").hide();
+                    $("#progresspercent").hide();
+                    $("#error").slideDown(1000);
+                    var feedback_url = "/yesnofeedback";
+                    var fileurl = $("#url").val();
+                    var input = {url: fileurl, success: false};
+                    $.ajax({
+                        type: 'POST',
+                        url: feedback_url,
+                        contentType: 'application/json',
+                        data: JSON.stringify(input),
+                        success: function (result) {
+                            setTimeout(function () {
+                                $('#report').fadeIn(500);
+                            }, 0);
+                        }
+                    });
+                    console.log(errmsg);
+                    console.log('An error occurred while trying to download the file');
                 }
-            }
+            };
+
+            initprogress();
 
             Dropbox.save(options);
             return false;
         }
+
     </script>
 
 {% endblock head %}
@@ -41,7 +102,7 @@
 {% block body %}
 
 
-    <div class="container text-center">
+    <div class="container text-center" id="container">
 
         <h3>
             Save any file over internet to Dropbox with out even downloading it to your computer
@@ -61,7 +122,25 @@
             <button class="btn btn-primary" type="submit">Save to Dropbox</button>
         </form>
 
-        <div class="progress" id="progress">
+
+        <div class="progress progress-striped active" id="progress" hidden="hidden">
+            <div id="progressbar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                 aria-valuemax="100" style="width: 0%; "><span class="sr-only">0% Complete </span></div>
+        </div>
+
+        <div class="alert alert-info" id="progresspercent" hidden="hidden">
+        </div>
+
+        <div id="done" class="alert alert-success" hidden="hidden">
+            File is Successfully Downloaded to Your Dropbox
+        </div>
+
+        <div id="error" class="alert alert-danger" hidden="hidden">
+            An error occurred while trying to download the file
+        </div>
+
+        <div id="report" class="alert alert-warning" hidden="hidden">
+            The error is reported to the developer of the application
         </div>
 
     </div>
