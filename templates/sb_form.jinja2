@@ -8,19 +8,13 @@
     <script type="text/javascript">
         updateprogress = function (progress) {
             var percentprogress = Math.floor(progress * 100);
-
-            {#                    var d = "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"" + percentprogress#}
-            {#                            + "\" aria-valuemin=\"0\" aria-valuemax=\"100\" " +#}
-            {#                            "style=\"width: " + percentprogress + "%; \"><span class=\"sr-only\">" + percentprogress + "% Complete </span></div>";#}
-
-            $("#progressbar").attr("aria-valuenow", percentprogress);
-            $("#progressbar").attr("style", "width:" + percentprogress + "%");
+            var progressbar = $("#progressbar");
+            progressbar.attr("aria-valuenow", percentprogress);
+            progressbar.attr("style", "width:" + percentprogress + "%");
             $("#progressbar span").html(percentprogress + "% Complete");
-
             $("#progresspercent").html(percentprogress + "% Complete");
 
-            console.log(progress);
-            {#                    $("#progress").html(d);#}
+            console.log(percentprogress + "% Complete");
         };
 
         initprogress = function () {
@@ -53,13 +47,23 @@
                     {'url': fileurl}
                 ],
                 success: function () {
-                    console.log('File is Successfully Downloaded to Your Dropbox');
+                    console.log('Download Successful');
                     $("#done").slideDown(3000);
                     setTimeout(function () {
                         $("#progress").slideUp(2000);
                         $("#progresspercent").slideUp(2000);
                     }, 5000);
-
+                    var feedback_url = "/yesnofeedback";
+                    var input = {url: fileurl, success: true, msg: 'Download Successful'};
+                    $.ajax({
+                        type: 'POST',
+                        url: feedback_url,
+                        contentType: 'application/json',
+                        data: JSON.stringify(input),
+                        success: function (result) {
+                            console.log('Success Feedback sent');
+                        }
+                    });
                 },
                 progress: updateprogress,
                 cancel: function () {
@@ -71,8 +75,7 @@
                     $("#progresspercent").hide();
                     $("#error").slideDown(1000);
                     var feedback_url = "/yesnofeedback";
-                    var fileurl = $("#url").val();
-                    var input = {url: fileurl, success: false};
+                    var input = {url: fileurl, success: false, msg: errmsg};
                     $.ajax({
                         type: 'POST',
                         url: feedback_url,
@@ -82,6 +85,7 @@
                             setTimeout(function () {
                                 $('#report').fadeIn(500);
                             }, 0);
+                            console.log('The error is reported to the developer of the application');
                         }
                     });
                     console.log(errmsg);
@@ -132,7 +136,7 @@
         </div>
 
         <div id="done" class="alert alert-success" hidden="hidden">
-            File is Successfully Downloaded to Your Dropbox
+            File is Downloaded Successfully to Your Dropbox
         </div>
 
         <div id="error" class="alert alert-danger" hidden="hidden">
