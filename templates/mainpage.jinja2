@@ -26,10 +26,8 @@
             $("#report").hide();
         };
 
-        save2db = function () {
-            var fileurl = $.trim($("#url").val());
-            console.log(fileurl);
-            if (fileurl === "" || typeof fileurl === "undefined") {
+        save2db = function (fileurl) {
+            if (fileurl === "" || typeof fileurl === "undefined" || fileurl == null) {
                 return false;
             }
             if (fileurl.indexOf('http://') != 0 && fileurl.indexOf('https://') != 0 && fileurl.indexOf('ftp://') != 0) {
@@ -42,6 +40,7 @@
                     fileurl = 'http://' + fileurl;
                 }
             }
+            console.log(fileurl);
             options = {
                 files: [
                     {'url': fileurl}
@@ -96,7 +95,6 @@
             initprogress();
 
             Dropbox.save(options);
-            return false;
         }
 
     </script>
@@ -118,7 +116,7 @@
             </div>
         {% endif %}
 
-        <form action="javascript:save2db();" method="get" class="form-signin">
+        <form id="save-to-db" class="form-signin">
             <label class="sr-only">
                 Enter the URL
             </label>
@@ -150,3 +148,15 @@
     </div>
 
 {% endblock %}
+
+{% block footerjs %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#save-to-db').submit(function (event) {
+                event.preventDefault(); // to stop the form from submitting
+                /* Validations go here */
+                save2db($.trim($("#url").val()));
+            });
+        });
+    </script>
+{% endblock footerjs %}

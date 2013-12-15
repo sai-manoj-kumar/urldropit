@@ -1,5 +1,5 @@
 application: urldropit
-version: live
+version: beta
 runtime: python27
 api_version: 1
 threadsafe: true
